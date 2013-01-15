@@ -275,8 +275,8 @@ const bool Z_ENDSTOPS_INVERTING = false; // set to true to invert the logic of t
 #define Y_HOME_DIR 1
 #define Z_HOME_DIR 1
 
-#define min_software_endstops false //If true, axis won't move to coordinates less than HOME_POS.
-#define max_software_endstops false //If true, axis won't move to coordinates greater than the defined lengths below.
+#define min_software_endstops true //If true, axis won't move to coordinates less than *_MIN_POS.
+#define max_software_endstops true //If true, axis won't move to coordinates greater than *_MAX_POS.
 
 // Travel limits after homing
 // For deltabots, the MAX_POS doesn't have to be exact, it will be recalculated from MANUAL_Z_HOME_POS below.
@@ -284,6 +284,7 @@ const bool Z_ENDSTOPS_INVERTING = false; // set to true to invert the logic of t
 #define X_MIN_POS -255
 #define Y_MAX_POS 255
 #define Y_MIN_POS -255
+
 #define Z_MAX_POS MANUAL_Z_HOME_POS
 #define Z_MIN_POS 0
 
