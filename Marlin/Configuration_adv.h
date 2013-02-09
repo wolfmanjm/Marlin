@@ -66,6 +66,11 @@
 //#define CONTROLLERFAN_PIN 23 //Pin used for the fan to cool controller, comment out to disable this function
 #define CONTROLLERFAN_SEC 60 //How many seconds, after all motors were disabled, the fan should run
 
+// When first starting the main fan, run it at full speed for the
+// given number of milliseconds.  This gets the fan spinning reliably
+// before setting a PWM value. (Does not work with software PWM for fan on Sanguinololu)
+//#define FAN_KICKSTART_TIME 100
+
 //===========================================================================
 //=============================Mechanical Settings===========================
 //===========================================================================
@@ -287,6 +292,19 @@ const unsigned int dropsegments=5; //everything with less than this number of st
 // #define FWRETRACT  //ONLY PARTIALLY TESTED
 #define MIN_RETRACT 0.1 //minimum extruded mm to accept a automatic gcode retraction attempt
 
+
+//adds support for experimental filament exchange support M600; requires display
+#ifdef ULTIPANEL
+  //#define FILAMENTCHANGEENABLE
+  #ifdef FILAMENTCHANGEENABLE
+    #define FILAMENTCHANGE_XPOS 3
+    #define FILAMENTCHANGE_YPOS 3
+    #define FILAMENTCHANGE_ZADD 10
+    #define FILAMENTCHANGE_FIRSTRETRACT -2
+    #define FILAMENTCHANGE_FINALRETRACT -100
+  #endif
+#endif
+ 
 //===========================================================================
 //=============================  Define Defines  ============================
 //===========================================================================

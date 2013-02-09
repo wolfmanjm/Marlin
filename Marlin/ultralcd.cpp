@@ -5,6 +5,7 @@
 #include "language.h"
 #include "cardreader.h"
 #include "temperature.h"
+#include "stepper.h"
 #include "ConfigurationStore.h"
 
 /* Configuration settings */
@@ -221,10 +222,7 @@ void lcd_preheat_pla()
     setTargetHotend1(plaPreheatHotendTemp);
     setTargetHotend2(plaPreheatHotendTemp);
     setTargetBed(plaPreheatHPBTemp);
-#if FAN_PIN > -1
     fanSpeed = plaPreheatFanSpeed;
-    analogWrite(FAN_PIN,  fanSpeed);
-#endif
     lcd_return_to_status();
 }
 
@@ -234,10 +232,7 @@ void lcd_preheat_abs()
     setTargetHotend1(absPreheatHotendTemp);
     setTargetHotend2(absPreheatHotendTemp);
     setTargetBed(absPreheatHPBTemp);
-#if FAN_PIN > -1
     fanSpeed = absPreheatFanSpeed;
-    analogWrite(FAN_PIN,  fanSpeed);
-#endif
     lcd_return_to_status();
 }
 
@@ -258,6 +253,9 @@ static void lcd_tune_menu()
 #endif
     MENU_ITEM_EDIT(int3, MSG_FAN_SPEED, &fanSpeed, 0, 255);
     MENU_ITEM_EDIT(int3, MSG_FLOW, &extrudemultiply, 10, 999);
+#ifdef FILAMENTCHANGEENABLE
+     MENU_ITEM(gcode, MSG_FILAMENTCHANGE, PSTR("M600"));
+#endif
     END_MENU();
 }
 
