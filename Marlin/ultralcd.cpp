@@ -38,6 +38,7 @@ void copy_and_scalePID_d();
 /* Different menus */
 static void lcd_status_screen();
 #ifdef ULTIPANEL
+extern bool powersupply;
 static void lcd_main_menu();
 static void lcd_tune_menu();
 static void lcd_prepare_menu();
@@ -303,6 +304,12 @@ static void lcd_prepare_menu()
     MENU_ITEM(function, MSG_PREHEAT_PLA, lcd_preheat_pla);
     MENU_ITEM(function, MSG_PREHEAT_ABS, lcd_preheat_abs);
     MENU_ITEM(gcode, MSG_COOLDOWN, PSTR("M104 S0\nM140 S0"));
+    if (powersupply)
+    {
+        MENU_ITEM(gcode, MSG_SWITCH_PS_OFF, PSTR("M81"));
+    }else{
+        MENU_ITEM(gcode, MSG_SWITCH_PS_ON, PSTR("M80"));
+    }
     MENU_ITEM(submenu, MSG_MOVE_AXIS, lcd_move_menu);
     END_MENU();
 }
