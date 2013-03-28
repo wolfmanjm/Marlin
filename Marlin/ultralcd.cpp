@@ -686,11 +686,13 @@ void lcd_init()
 #ifdef NEWPANEL
     pinMode(BTN_EN1,INPUT);
     pinMode(BTN_EN2,INPUT); 
-    pinMode(BTN_ENC,INPUT); 
     pinMode(SDCARDDETECT,INPUT);
     WRITE(BTN_EN1,HIGH);
     WRITE(BTN_EN2,HIGH);
+  #if defined(BTN_ENC) && BTN_ENC > -1
+    pinMode(BTN_ENC,INPUT); 
     WRITE(BTN_ENC,HIGH);
+  #endif    
 #else
     pinMode(SHIFT_CLK,OUTPUT);
     pinMode(SHIFT_LD,OUTPUT);
@@ -705,7 +707,9 @@ void lcd_init()
     lcd_oldcardstatus = IS_SD_INSERTED;
 #endif//(SDCARDDETECT > -1)
     lcd_buttons_update();
+#ifdef ULTIPANEL    
     encoderDiff = 0;
+#endif    
 }
 
 void lcd_update()
@@ -713,6 +717,10 @@ void lcd_update()
     static unsigned long timeoutToStatus = 0;
     
     lcd_buttons_update();
+    
+    #ifdef LCD_HAS_SLOW_BUTTONS
+    buttons |= lcd_implementation_read_slow_buttons(); // buttons which take too long to read in interrupt context
+    #endif
     
     #if (SDCARDDETECT > -1)
     if((IS_SD_INSERTED != lcd_oldcardstatus))
@@ -747,8 +755,12 @@ void lcd_update()
         if (LCD_CLICKED)
             timeoutToStatus = millis() + LCD_TIMEOUT_TO_STATUS;
 #endif//ULTIPANEL
-        
         (*currentMenu)();
+
+#ifdef LCD_HAS_STATUS_INDICATORS
+        lcd_implementation_update_indicators();
+#endif        
+        
 #ifdef ULTIPANEL
         if(timeoutToStatus < millis() && currentMenu != lcd_status_screen)
         {
@@ -799,8 +811,10 @@ void lcd_buttons_update()
     uint8_t newbutton=0;
     if(READ(BTN_EN1)==0)  newbutton|=EN_A;
     if(READ(BTN_EN2)==0)  newbutton|=EN_B;
+  #if defined(BTN_ENC) && BTN_ENC > -1
     if((blocking_enc<millis()) && (READ(BTN_ENC)==0))
         newbutton |= EN_C;
+  #endif      
     buttons = newbutton;
 #else   //read it from the shift register
     uint8_t newbutton=0;
@@ -855,6 +869,11 @@ void lcd_buttons_update()
         }
     }
     lastEncoderBits = enc;
+}
+
+bool lcd_clicked() 
+{ 
+  return LCD_CLICKED;
 }
 #endif//ULTIPANEL
 

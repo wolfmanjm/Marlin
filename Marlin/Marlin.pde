@@ -34,7 +34,15 @@
 #include "pins.h"
 
 #ifdef ULTRA_LCD
-#include <LiquidCrystal.h>
+  #if defined(LCD_I2C_TYPE_PCF8575)
+    #include <Wire.h>
+    #include <LiquidCrystal_I2C.h>
+  #elif defined(LCD_I2C_TYPE_MCP23017) || defined(LCD_I2C_TYPE_MCP23008)
+    #include <Wire.h>
+    #include <LiquidTWI2.h>
+  #else
+    #include <LiquidCrystal.h>
+  #endif
 #endif
 
 #if DIGIPOTSS_PIN > -1
