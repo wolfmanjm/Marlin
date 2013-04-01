@@ -1464,9 +1464,5 @@
 	#define MSG_ERR_LONG_EXTRUDE_STOP " liian pitka pursotus estetty"
 
 #endif
-<<<<<<< HEAD
 #endif // ifndef LANGUAGE_H
 
-=======
-#endif // ifndef LANGUAGE_H
->>>>>>> origin/Marlin_v1
