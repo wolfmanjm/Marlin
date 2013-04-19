@@ -193,6 +193,9 @@ VPATH += $(HARDWARE_SRC)
 ifeq ($(HARDWARE_VARIANT), arduino)
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/LiquidCrystal
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/SPI
+VPATH += /home/morris/work/sketchbook/libraries/LiquidTWI2
+VPATH += $(ARDUINO_INSTALL_DIR)/libraries/Wire/utility
+VPATH += $(ARDUINO_INSTALL_DIR)/libraries/Wire
 else
 VPATH += $(HARDWARE_DIR)/libraries/LiquidCrystal
 VPATH += $(HARDWARE_DIR)/libraries/SPI
@@ -205,15 +208,16 @@ HARDWARE_SUB_VARIANT ?= standard
 VPATH += $(HARDWARE_DIR)/$(HARDWARE_VARIANT)/variants/$(HARDWARE_SUB_VARIANT)
 endif
 SRC = wiring.c \
-	wiring_analog.c wiring_digital.c \
-	wiring_pulse.c \
-	wiring_shift.c WInterrupts.c
-CXXSRC = WMath.cpp WString.cpp Print.cpp Marlin_main.cpp	\
-	MarlinSerial.cpp Sd2Card.cpp SdBaseFile.cpp SdFatUtil.cpp	\
-	SdFile.cpp SdVolume.cpp motion_control.cpp planner.cpp		\
-	stepper.cpp temperature.cpp cardreader.cpp ConfigurationStore.cpp \
-	watchdog.cpp
-CXXSRC += LiquidCrystal.cpp ultralcd.cpp SPI.cpp
+        wiring_analog.c wiring_digital.c \
+        wiring_pulse.c \
+        wiring_shift.c WInterrupts.c
+SRC += twi.c
+CXXSRC = WMath.cpp WString.cpp Print.cpp Marlin_main.cpp        \
+        MarlinSerial.cpp Sd2Card.cpp SdBaseFile.cpp SdFatUtil.cpp       \
+        SdFile.cpp SdVolume.cpp motion_control.cpp planner.cpp          \
+        stepper.cpp temperature.cpp cardreader.cpp ConfigurationStore.cpp \
+        watchdog.cpp
+CXXSRC += LiquidCrystal.cpp ultralcd.cpp SPI.cpp LiquidTWI2.cpp Wire.cpp
 
 #Check for Arduino 1.0.0 or higher and use the correct sourcefiles for that version
 ifeq ($(shell [ $(ARDUINO_VERSION) -ge 100 ] && echo true), true)

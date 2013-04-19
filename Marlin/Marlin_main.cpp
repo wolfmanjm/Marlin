@@ -1446,7 +1446,7 @@ void process_commands()
     }
     break;
     
-    #if defined(LARGE_FLASH) && LARGE_FLASH == true && defined(BEEPER) && BEEPER > -1
+    #if 0 && defined(LARGE_FLASH) && LARGE_FLASH == true && defined(BEEPER) && BEEPER > -1
     case 300: // M300
     {
       int beepS = 1;
