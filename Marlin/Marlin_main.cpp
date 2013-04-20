@@ -729,8 +729,9 @@ void process_commands()
         destination[i] = current_position[i];
       }
       feedrate = 0.0;
-      home_all_axis = !((code_seen(axis_codes[0])) || (code_seen(axis_codes[1])) || (code_seen(axis_codes[2])))
-                    || ((code_seen(axis_codes[0])) && (code_seen(axis_codes[1])) && (code_seen(axis_codes[2])));
+      //home_all_axis = !((code_seen(axis_codes[0])) || (code_seen(axis_codes[1])) || (code_seen(axis_codes[2])))|| ((code_seen(axis_codes[0])) && (code_seen(axis_codes[1])) && (code_seen(axis_codes[2])));
+	  // it makes no sense for a delta to only hone one axis, and in fact can damage things
+	  home_all_axis= true;
       
       #ifdef QUICK_HOME
       if (home_all_axis)  // Move all carriages up together until the first endstop is hit.
