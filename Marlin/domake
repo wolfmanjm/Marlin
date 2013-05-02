@@ -1,0 +1,1 @@
+make HARDWARE_MOTHERBOARD=33 ARDUINO_INSTALL_DIR=/opt/arduino ARDUINO_VERSION=102 AVR_TOOLS_PATH=/opt/arduino/hardware/tools/avr/bin/

@@ -1,0 +1,1 @@
+/aux/Stuff/reprap/arduino-0022/hardware/tools/avrdude -D -C /aux/Stuff/reprap/arduino-0022/hardware/tools/avrdude.conf -p atmega2560 -P /dev/ttyACM0 -c stk500v2 -b 115200 -U flash:w:applet/Marlin.hex:i
