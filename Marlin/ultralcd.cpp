@@ -248,6 +248,15 @@ static void lcd_autostart_sd()
 }
 #endif
 
+void lcd_heaters_off()
+{
+	setTargetHotend0(0);
+	setTargetHotend1(0);
+	setTargetHotend2(0);
+	setTargetBed(0);
+	lcd_return_to_status();
+}
+
 void lcd_preheat_pla()
 {
     setTargetHotend0(plaPreheatHotendTemp);
@@ -299,11 +308,11 @@ static void lcd_prepare_menu()
     //MENU_ITEM(function, MSG_AUTOSTART, lcd_autostart_sd);
 #endif
     MENU_ITEM(gcode, MSG_DISABLE_STEPPERS, PSTR("M84"));
-    MENU_ITEM(gcode, MSG_AUTO_HOME, PSTR("G28"));
+    MENU_ITEM(gcode, MSG_AUTO_HOME, PSTR("G28 X0 Y0"));
     //MENU_ITEM(gcode, MSG_SET_ORIGIN, PSTR("G92 X0 Y0 Z0"));
     MENU_ITEM(function, MSG_PREHEAT_PLA, lcd_preheat_pla);
     MENU_ITEM(function, MSG_PREHEAT_ABS, lcd_preheat_abs);
-    MENU_ITEM(gcode, MSG_COOLDOWN, PSTR("M104 S0\nM140 S0"));
+    MENU_ITEM(function, MSG_COOLDOWN, lcd_heaters_off); // PSTR("M104 S0\nM140 S0"));
     if (powersupply)
     {
         MENU_ITEM(gcode, MSG_SWITCH_PS_OFF, PSTR("M81"));
@@ -327,7 +336,7 @@ static void lcd_move_x()
         if (current_position[X_AXIS] > X_MAX_POS)
             current_position[X_AXIS] = X_MAX_POS;
         encoderPosition = 0;
-        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 600, active_extruder);
+        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], LCD_FEEDRATE_X, active_extruder);
         lcdDrawUpdate = 1;
     }
     if (lcdDrawUpdate)
@@ -351,7 +360,7 @@ static void lcd_move_y()
         if (current_position[Y_AXIS] > Y_MAX_POS)
             current_position[Y_AXIS] = Y_MAX_POS;
         encoderPosition = 0;
-        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 600, active_extruder);
+        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], LCD_FEEDRATE_Y, active_extruder);
         lcdDrawUpdate = 1;
     }
     if (lcdDrawUpdate)
@@ -375,7 +384,7 @@ static void lcd_move_z()
         if (current_position[Z_AXIS] > Z_MAX_POS)
             current_position[Z_AXIS] = Z_MAX_POS;
         encoderPosition = 0;
-        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 60, active_extruder);
+        plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], LCD_FEEDRATE_Z, active_extruder);
         lcdDrawUpdate = 1;
     }
     if (lcdDrawUpdate)

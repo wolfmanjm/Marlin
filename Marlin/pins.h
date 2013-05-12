@@ -1045,6 +1045,12 @@
 #define KILL_PIN           -1
 #define ALARM_PIN          -1
 
+// VIKI
+#define BTN_EN1            17
+#define BTN_EN2            18
+
+#define SDCARDDETECT     12
+
 #ifndef SDSUPPORT
 // these pins are defined in the SD library if building with SD support
   #define SCK_PIN           9

@@ -177,7 +177,7 @@ int fanSpeed=0;
 #endif
 
 #ifdef ULTIPANEL
-	bool powersupply = true;
+	bool powersupply = false;
 #endif
 
 //===========================================================================

@@ -19,6 +19,11 @@
 
   #define LCD_UPDATE_INTERVAL 100
   #define LCD_TIMEOUT_TO_STATUS 15000
+  
+  // feedrate in mm/sec for jogging via LCD
+  #define LCD_FEEDRATE_X 20
+  #define LCD_FEEDRATE_Y 20
+  #define LCD_FEEDRATE_Z 10
 
   #ifdef ULTIPANEL
   void lcd_buttons_update();
