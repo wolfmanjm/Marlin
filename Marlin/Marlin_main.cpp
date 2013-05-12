@@ -874,13 +874,13 @@ void process_commands()
       previous_millis_cmd = millis();
       if (codenum > 0){
         codenum += millis();  // keep track of when we started waiting
-        while(millis()  < codenum && !LCD_CLICKED){
+        while(millis()  < codenum && !lcd_clicked()){
           manage_heater();
           manage_inactivity();
           lcd_update();
         }
       }else{
-        while(!LCD_CLICKED){
+        while(!lcd_clicked()){
           manage_heater();
           manage_inactivity();
           lcd_update();
@@ -1446,16 +1446,20 @@ void process_commands()
     }
     break;
     
-    #if defined(LARGE_FLASH) && LARGE_FLASH == true && defined(BEEPER) && BEEPER > -1
+    #if defined(LARGE_FLASH) && LARGE_FLASH == true
     case 300: // M300
     {
-      int beepS = 1;
+      int beepS = 400;
       int beepP = 1000;
       if(code_seen('S')) beepS = code_value();
       if(code_seen('P')) beepP = code_value();
-      tone(BEEPER, beepS);
-      delay(beepP);
-      noTone(BEEPER);
+      #if defined(BEEPER) && BEEPER > -1
+        tone(BEEPER, beepS);
+        delay(beepP);
+        noTone(BEEPER);
+      #elif defined(ULTRALCD)
+        lcd_buzz(beepS, beepP);
+      #endif
     }
     break;
     #endif // M300
@@ -1666,23 +1670,25 @@ void process_commands()
         delay(100);
         LCD_ALERTMESSAGEPGM(MSG_FILAMENTCHANGE);
         uint8_t cnt=0;
-        while(!LCD_CLICKED){
+        while(!lcd_clicked()){
           cnt++;
           manage_heater();
           manage_inactivity();
           lcd_update();
           
-          #if BEEPER > -1
           if(cnt==0)
           {
+          #if defined(BEEPER) && BEEPER > -1
             SET_OUTPUT(BEEPER);
             
             WRITE(BEEPER,HIGH);
             delay(3);
             WRITE(BEEPER,LOW);
             delay(3);
-          }
+          #else 
+            lcd_buzz(1000/6,100);
           #endif
+          }
         }
         
         //return to normal

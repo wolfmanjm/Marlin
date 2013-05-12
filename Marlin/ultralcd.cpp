@@ -76,7 +76,11 @@ static void menu_action_setting_edit_callback_float51(const char* pstr, float* p
 static void menu_action_setting_edit_callback_float52(const char* pstr, float* ptr, float minValue, float maxValue, menuFunc_t callbackFunc);
 static void menu_action_setting_edit_callback_long5(const char* pstr, unsigned long* ptr, unsigned long minValue, unsigned long maxValue, menuFunc_t callbackFunc);
 
-#define ENCODER_STEPS_PER_MENU_ITEM 5
+#if !defined(LCD_I2C_VIKI)
+  #define ENCODER_STEPS_PER_MENU_ITEM 5
+#else
+  #define ENCODER_STEPS_PER_MENU_ITEM 2 // VIKI LCD rotary encoder uses a different number of steps per rotation
+#endif
 
 /* Helper macros for menus */
 #define START_MENU() do { \
@@ -745,11 +749,13 @@ void lcd_init()
 #ifdef NEWPANEL
     pinMode(BTN_EN1,INPUT);
     pinMode(BTN_EN2,INPUT); 
-    pinMode(BTN_ENC,INPUT); 
     pinMode(SDCARDDETECT,INPUT);
     WRITE(BTN_EN1,HIGH);
     WRITE(BTN_EN2,HIGH);
+  #if defined(BTN_ENC) && BTN_ENC > -1
+    pinMode(BTN_ENC,INPUT); 
     WRITE(BTN_ENC,HIGH);
+  #endif    
 #else
     pinMode(SHIFT_CLK,OUTPUT);
     pinMode(SHIFT_LD,OUTPUT);
@@ -764,7 +770,9 @@ void lcd_init()
     lcd_oldcardstatus = IS_SD_INSERTED;
 #endif//(SDCARDDETECT > -1)
     lcd_buttons_update();
+#ifdef ULTIPANEL    
     encoderDiff = 0;
+#endif    
 }
 
 void lcd_update()
@@ -772,6 +780,10 @@ void lcd_update()
     static unsigned long timeoutToStatus = 0;
     
     lcd_buttons_update();
+    
+    #ifdef LCD_HAS_SLOW_BUTTONS
+    buttons |= lcd_implementation_read_slow_buttons(); // buttons which take too long to read in interrupt context
+    #endif
     
     #if (SDCARDDETECT > -1)
     if((IS_SD_INSERTED != lcd_oldcardstatus))
@@ -808,19 +820,24 @@ void lcd_update()
 #endif//ULTIPANEL
 
 #ifdef DOGLCD        // Changes due to different driver architecture of the DOGM display
-		blink++;	   // Variable for fan animation and alive dot
-		u8g.firstPage();
-		do {
-				u8g.setFont(u8g_font_6x10_marlin);
-				u8g.setPrintPos(125,0);
-				if (blink % 2) u8g.setColorIndex(1); else u8g.setColorIndex(0); // Set color for the alive dot
-				u8g.drawPixel(127,63);	// draw alive dot
-				u8g.setColorIndex(1);	// black on white
-				(*currentMenu)();
-				if (!lcdDrawUpdate)  break; // Terminate display update, when nothing new to draw. This must be done before the last dogm.next()
-		   } while( u8g.nextPage() );
+        blink++;     // Variable for fan animation and alive dot
+        u8g.firstPage();
+        do 
+        {
+            u8g.setFont(u8g_font_6x10_marlin);
+            u8g.setPrintPos(125,0);
+            if (blink % 2) u8g.setColorIndex(1); else u8g.setColorIndex(0); // Set color for the alive dot
+            u8g.drawPixel(127,63); // draw alive dot
+            u8g.setColorIndex(1); // black on white
+            (*currentMenu)();
+            if (!lcdDrawUpdate)  break; // Terminate display update, when nothing new to draw. This must be done before the last dogm.next()
+        } while( u8g.nextPage() );
 #else        
         (*currentMenu)();
+#endif
+
+#ifdef LCD_HAS_STATUS_INDICATORS
+        lcd_implementation_update_indicators();
 #endif
 
 #ifdef ULTIPANEL
@@ -873,8 +890,10 @@ void lcd_buttons_update()
     uint8_t newbutton=0;
     if(READ(BTN_EN1)==0)  newbutton|=EN_A;
     if(READ(BTN_EN2)==0)  newbutton|=EN_B;
+  #if defined(BTN_ENC) && BTN_ENC > -1
     if((blocking_enc<millis()) && (READ(BTN_ENC)==0))
         newbutton |= EN_C;
+  #endif      
     buttons = newbutton;
 #else   //read it from the shift register
     uint8_t newbutton=0;
@@ -929,6 +948,18 @@ void lcd_buttons_update()
         }
     }
     lastEncoderBits = enc;
+}
+
+void lcd_buzz(long duration, uint16_t freq)
+{ 
+#ifdef LCD_USE_I2C_BUZZER
+  lcd.buzz(duration,freq);
+#endif   
+}
+
+bool lcd_clicked() 
+{ 
+  return LCD_CLICKED;
 }
 #endif//ULTIPANEL
 

@@ -14,7 +14,7 @@
 #define DIGIPOTSS_PIN -1
 
 #if MOTHERBOARD == 99
-#define	KNOWN_BOARD 1
+#define KNOWN_BOARD 1
 
 #define X_STEP_PIN          2
 #define X_DIR_PIN           3
@@ -228,7 +228,7 @@
 
 //x axis pins
     #define X_STEP_PIN      21                  //different from stanard GEN7
-    #define X_DIR_PIN       20				    //different from stanard GEN7
+    #define X_DIR_PIN       20            //different from stanard GEN7
     #define X_ENABLE_PIN    24
     #define X_STOP_PIN      0
 
@@ -273,12 +273,12 @@
     //#define TX_ENABLE_PIN       12
     //#define RX_ENABLE_PIN       13
     
-    #define BEEPER -1	
-	#define SDCARDDETECT -1 		
-    #define SUICIDE_PIN -1						//has to be defined; otherwise Power_off doesn't work
-	
+    #define BEEPER -1 
+  #define SDCARDDETECT -1     
+    #define SUICIDE_PIN -1            //has to be defined; otherwise Power_off doesn't work
+  
     #define KILL_PIN -1
-	//Pins for 4bit LCD Support 
+  //Pins for 4bit LCD Support 
     #define LCD_PINS_RS 18 
     #define LCD_PINS_ENABLE 17
     #define LCD_PINS_D4 16
@@ -290,15 +290,6 @@
     #define BTN_EN1 11
     #define BTN_EN2 10
     #define BTN_ENC 12  //the click
-    
-    #define BLEN_C 2
-    #define BLEN_B 1
-    #define BLEN_A 0
-
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
 #endif
 
 /****************************************************************************************
@@ -386,16 +377,6 @@
 #ifdef ULTRA_LCD
 
   #ifdef NEWPANEL
-     //encoder rotation values
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
-
-    #define BLEN_A 0
-    #define BLEN_B 1
-    #define BLEN_C 2
-
     #define LCD_PINS_RS 16 
     #define LCD_PINS_ENABLE 17
     #define LCD_PINS_D4 23
@@ -413,7 +394,7 @@
       #define SDCARDDETECT 49
     #else
       //arduino pin which triggers an piezzo beeper
-      #define BEEPER 33	 // Beeper on AUX-4
+      #define BEEPER 33  // Beeper on AUX-4
 
       //buttons are directly attached using AUX-2
       #define BTN_EN1 37
@@ -429,10 +410,10 @@
 
   #else //old style panel with shift register
     //arduino pin witch triggers an piezzo beeper
-    #define BEEPER 33		No Beeper added
+    #define BEEPER 33   // No Beeper added 
 
     //buttons are attached to a shift register
-	// Not wired this yet
+  // Not wired this yet
     //#define SHIFT_CLK 38
     //#define SHIFT_LD 42
     //#define SHIFT_OUT 40
@@ -444,25 +425,6 @@
     #define LCD_PINS_D5 25 
     #define LCD_PINS_D6 27
     #define LCD_PINS_D7 29
-    
-    //encoder rotation values
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
-
-    
-    //bits in the shift register that carry the buttons for:
-    // left up center down right red
-    #define BL_LE 7
-    #define BL_UP 6
-    #define BL_MI 5
-    #define BL_DW 4
-    #define BL_RI 3
-    #define BL_ST 2
-
-    #define BLEN_B 1
-    #define BLEN_A 0
   #endif 
 #endif //ULTRA_LCD
 
@@ -636,8 +598,8 @@
     #define DEBUG_PIN        0
     
     //our RS485 pins
-    #define TX_ENABLE_PIN	12
-    #define RX_ENABLE_PIN	13
+    #define TX_ENABLE_PIN 12
+    #define RX_ENABLE_PIN 13
 
     
 #endif
@@ -736,43 +698,32 @@
      //we have no buzzer installed
      #define BEEPER -1
      //LCD Pins
-	 	 #ifdef DOGLCD
-			 // Pins for DOGM SPI LCD Support
-			 #define DOGLCD_A0	30
-			 #define DOGLCD_CS	29
-			 // GLCD features
-			 #define LCD_CONTRAST 1
-			 // Uncomment screen orientation
-		     // #define LCD_SCREEN_ROT_0
-		     // #define LCD_SCREEN_ROT_90
-			 #define LCD_SCREEN_ROT_180
-		     // #define LCD_SCREEN_ROT_270
-			 #else // standard Hitachi LCD controller
-			 #define LCD_PINS_RS        4
-			 #define LCD_PINS_ENABLE    17
-			 #define LCD_PINS_D4        30
-			 #define LCD_PINS_D5        29
-			 #define LCD_PINS_D6        28
-			 #define LCD_PINS_D7        27
-         #endif
+     #ifdef DOGLCD
+       // Pins for DOGM SPI LCD Support
+       #define DOGLCD_A0  30
+       #define DOGLCD_CS  29
+       // GLCD features
+       #define LCD_CONTRAST 1
+       // Uncomment screen orientation
+         // #define LCD_SCREEN_ROT_0
+         // #define LCD_SCREEN_ROT_90
+       #define LCD_SCREEN_ROT_180
+         // #define LCD_SCREEN_ROT_270
+       #else // standard Hitachi LCD controller
+       #define LCD_PINS_RS        4
+       #define LCD_PINS_ENABLE    17
+       #define LCD_PINS_D4        30
+       #define LCD_PINS_D5        29
+       #define LCD_PINS_D6        28
+       #define LCD_PINS_D7        27
+     #endif
      //The encoder and click button
-     #define BTN_EN1 11  //must be a hardware interrupt pin
-     #define BTN_EN2 10 //must be hardware interrupt pin
+     #define BTN_EN1 11  
+     #define BTN_EN2 10 
      #define BTN_ENC 16  //the switch
      //not connected to a pin
-     #define SDCARDDETECT -1
-     
-     //from the same bit in the RAMPS Newpanel define
-     //encoder rotation values
-     #define encrot0 0
-     #define encrot1 2
-     #define encrot2 3
-     #define encrot3 1
-     
-     #define BLEN_C 2
-     #define BLEN_B 1
-     #define BLEN_A 0
-     
+     #define SDCARDDETECT -1    
+    
    #endif //Newpanel
  #endif //Ultipanel
  
@@ -857,17 +808,8 @@
     #define BTN_EN2 42
     #define BTN_ENC 19  //the click
     
-    #define BLEN_C 2
-    #define BLEN_B 1
-    #define BLEN_A 0
-    
     #define SDCARDDETECT 38
     
-      //encoder rotation values
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
   #else //old style panel with shift register
     //arduino pin witch triggers an piezzo beeper
     #define BEEPER 18
@@ -884,33 +826,8 @@
     #define LCD_PINS_D5 21 
     #define LCD_PINS_D6 20
     #define LCD_PINS_D7 19
-    
-    //encoder rotation values
-    #ifndef ULTIMAKERCONTROLLER
-     #define encrot0 0
-     #define encrot1 2
-     #define encrot2 3
-     #define encrot3 1
-    #else
-     #define encrot0 0
-     #define encrot1 1
-     #define encrot2 3
-     #define encrot3 2
-
-    #endif
-
+  
     #define SDCARDDETECT -1
-    //bits in the shift register that carry the buttons for:
-    // left up center down right red
-    #define BL_LE 7
-    #define BL_UP 6
-    #define BL_MI 5
-    #define BL_DW 4
-    #define BL_RI 3
-    #define BL_ST 2
-
-    #define BLEN_B 1
-    #define BLEN_A 0
   #endif 
 #endif //ULTRA_LCD
 
@@ -1060,14 +977,6 @@
 #define BTN_EN1            11
 #define BTN_EN2            12
 #define BTN_ENC            43
-//encoder rotation values
-#define BLEN_C 2
-#define BLEN_B 1
-#define BLEN_A 0
-#define encrot0 0
-#define encrot1 2
-#define encrot2 3
-#define encrot3 1
 
 #endif //MOTHERBOARD==80
 
@@ -1372,12 +1281,12 @@
 #define E0_ENABLE_PIN       10
 
 /* future proofing */
-#define __FS	20
-#define __FD	19
-#define __GS	18
-#define __GD	13
+#define __FS  20
+#define __FD  19
+#define __GS  18
+#define __GD  13
 
-#define UNUSED_PWM           14	/* PWM on LEFT connector */
+#define UNUSED_PWM           14 /* PWM on LEFT connector */
 
 #define E1_STEP_PIN         -1 // 21
 #define E1_DIR_PIN          -1 // 20
@@ -1406,8 +1315,8 @@
 #define HEATER_BED_PIN      4
 #define TEMP_BED_PIN        2 // 1,2 or I2C
 
-#define I2C_SCL				16
-#define I2C_SDA				17
+#define I2C_SCL       16
+#define I2C_SDA       17
 
 #endif
 
@@ -1551,7 +1460,7 @@
 #define HEATER_BED_PIN     10   // BED
 #define TEMP_BED_PIN       14   // ANALOG NUMBERING
 
-#define BEEPER 33			// Beeper on AUX-4
+#define BEEPER 33     // Beeper on AUX-4
 
 
 #ifdef ULTRA_LCD
@@ -1571,17 +1480,7 @@
     #define BTN_EN2 64
     #define BTN_ENC 43  //the click
     
-    #define BLEN_C 2
-    #define BLEN_B 1
-    #define BLEN_A 0
-    
-    #define SDCARDDETECT -1		// Ramps does not use this port
-    
-      //encoder rotation values
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
+    #define SDCARDDETECT -1   // Ramps does not use this port
 #endif
 #endif //ULTRA_LCD
 
