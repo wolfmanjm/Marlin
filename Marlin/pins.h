@@ -1131,8 +1131,8 @@
 
 #define SDPOWER            -1
 #define SDSS                8
-#define LED_PIN            -1
-#define PS_ON_PIN          -1
+#define LED_PIN            30
+#define PS_ON_PIN          16
 #define KILL_PIN           -1
 #define ALARM_PIN          -1
 
