@@ -298,8 +298,6 @@ static void lcd_tune_menu()
 #ifdef FILAMENTCHANGEENABLE
      MENU_ITEM(gcode, MSG_FILAMENTCHANGE, PSTR("M600"));
 #endif
-	 MENU_ITEM(submenu, MSG_LEVEL, lcd_level_menu); // +++ jm
-
     END_MENU();
 }
 
@@ -316,6 +314,7 @@ static void lcd_prepare_menu()
     MENU_ITEM(function, MSG_PREHEAT_PLA, lcd_preheat_pla);
     MENU_ITEM(function, MSG_PREHEAT_ABS, lcd_preheat_abs);
     MENU_ITEM(function, MSG_COOLDOWN, lcd_heaters_off); // PSTR("M104 S0\nM140 S0"));
+	MENU_ITEM(submenu, MSG_LEVEL, lcd_level_menu); // +++ jm
     if (powersupply)
     {
         MENU_ITEM(gcode, MSG_SWITCH_PS_OFF, PSTR("M81"));
@@ -467,11 +466,11 @@ static void lcd_move_menu()
 static void lcd_level_menu()
 {
 	START_MENU();
-	MENU_ITEM(back, MSG_TUNE, lcd_tune_menu);
-	MENU_ITEM(gcode, MSG_LEVEL_FRONTLEFT, PSTR("G0 X0 Y0"));
-	MENU_ITEM(gcode, MSG_LEVEL_BACKRIGHT, PSTR("G0 X180 Y180"));
-	MENU_ITEM(gcode, MSG_LEVEL_FRONTRIGHT, PSTR("G0 X180 Y0"));
-	MENU_ITEM(gcode, MSG_LEVEL_BACKLEFT, PSTR("G0 X0 Y180"));
+	MENU_ITEM(back, MSG_PREPARE, lcd_prepare_menu);
+	MENU_ITEM(gcode, MSG_LEVEL_FRONTLEFT, PSTR("G0 X10 Y10"));
+	MENU_ITEM(gcode, MSG_LEVEL_BACKRIGHT, PSTR("G0 X170 Y170"));
+	MENU_ITEM(gcode, MSG_LEVEL_FRONTRIGHT, PSTR("G0 X170 Y10"));
+	MENU_ITEM(gcode, MSG_LEVEL_BACKLEFT, PSTR("G0 X10 Y170"));
 	MENU_ITEM(gcode, MSG_LEVEL_CENTER, PSTR("G0 X90 Y90"));
 	END_MENU();
 }
