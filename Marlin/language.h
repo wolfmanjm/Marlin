@@ -101,7 +101,17 @@
 	#define MSG_RESTORE_FAILSAFE "Restore Failsafe"
 	#define MSG_REFRESH "Refresh"
 	#define MSG_WATCH "Info screen"
-	#define MSG_PREPARE "Prepare"
+    #define MSG_PREPARE "Prepare"
+
+    // +++jm
+    #define MSG_LEVEL "Level"
+    #define MSG_LEVEL_FRONTLEFT "front left"
+    #define MSG_LEVEL_FRONTRIGHT "front right"
+    #define MSG_LEVEL_BACKLEFT "back left"
+    #define MSG_LEVEL_BACKRIGHT "back right"
+    #define MSG_LEVEL_CENTER "center"
+    // ++jm
+
 	#define MSG_TUNE "Tune"
 	#define MSG_PAUSE_PRINT "Pause Print"
 	#define MSG_RESUME_PRINT "Resume Print"

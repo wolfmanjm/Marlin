@@ -41,6 +41,7 @@ static void lcd_status_screen();
 extern bool powersupply;
 static void lcd_main_menu();
 static void lcd_tune_menu();
+static void lcd_level_menu();
 static void lcd_prepare_menu();
 static void lcd_move_menu();
 static void lcd_control_menu();
@@ -297,6 +298,8 @@ static void lcd_tune_menu()
 #ifdef FILAMENTCHANGEENABLE
      MENU_ITEM(gcode, MSG_FILAMENTCHANGE, PSTR("M600"));
 #endif
+	 MENU_ITEM(submenu, MSG_LEVEL, lcd_level_menu); // +++ jm
+
     END_MENU();
 }
 
@@ -458,6 +461,19 @@ static void lcd_move_menu()
     MENU_ITEM(submenu, "Move 0.1mm", lcd_move_menu_01mm);
     //TODO:X,Y,Z,E
     END_MENU();
+}
+
+//+++ jm
+static void lcd_level_menu()
+{
+	START_MENU();
+	MENU_ITEM(back, MSG_TUNE, lcd_tune_menu);
+	MENU_ITEM(gcode, MSG_LEVEL_FRONTLEFT, PSTR("G0 X0 Y0"));
+	MENU_ITEM(gcode, MSG_LEVEL_BACKRIGHT, PSTR("G0 X180 Y180"));
+	MENU_ITEM(gcode, MSG_LEVEL_FRONTRIGHT, PSTR("G0 X180 Y0"));
+	MENU_ITEM(gcode, MSG_LEVEL_BACKLEFT, PSTR("G0 X0 Y180"));
+	MENU_ITEM(gcode, MSG_LEVEL_CENTER, PSTR("G0 X90 Y90"));
+	END_MENU();
 }
 
 static void lcd_control_menu()

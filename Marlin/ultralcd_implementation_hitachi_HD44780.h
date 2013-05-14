@@ -683,14 +683,22 @@ static void lcd_implementation_quick_feedback()
 }
 
 #ifdef LCD_HAS_STATUS_INDICATORS
+#define SHOWIFHEATINGON
 static void lcd_implementation_update_indicators()
 {
   #if defined(LCD_I2C_PANELOLU2) || defined(LCD_I2C_VIKI)
     //set the LEDS - referred to as backlights by the LiquidTWI2 library 
     static uint8_t ledsprev = 0;
     uint8_t leds = 0;
-    if (isHeatingBed()) leds |= LED_A;
-    if (isHeatingHotend(0)) leds |= LED_B;
+#ifdef SHOWIFHEATINGON
+	//indicate that hotend or bed is on, not if it is actually being heated
+	if (target_temperature[0] > 0) leds |= LED_A;
+	if (target_temperature_bed > 0) leds |= LED_B;
+	
+#else
+	if (isHeatingBed()) leds |= LED_A;
+	if (isHeatingHotend(0)) leds |= LED_B;
+#endif
     if (fanSpeed) leds |= LED_C;
     #if EXTRUDERS > 1  
       if (isHeatingHotend(1)) leds |= LED_C;
