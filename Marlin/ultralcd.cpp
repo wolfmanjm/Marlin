@@ -131,6 +131,7 @@ bool lcd_oldcardstatus;
 #endif//ULTIPANEL
 
 menuFunc_t currentMenu = lcd_status_screen; /* function pointer to the currently active menu */
+menuFunc_t backMenu = NULL; /* function pointer to the menu to got to when back pressed */
 uint32_t lcd_next_update_millis;
 uint8_t lcd_status_update_delay;
 uint8_t lcdDrawUpdate = 2;                  /* Set to none-zero when the LCD needs to draw, decreased after every draw. Set to 2 in LCD routines so the LCD gets atleast 1 full redraw (first redraw is partial) */
@@ -734,11 +735,13 @@ static void lcd_quick_feedback()
 /** Menu action functions **/
 static void menu_action_back(menuFunc_t data)
 {
-    currentMenu = data;
+	backMenu= NULL;
+	currentMenu = data;
     encoderPosition = 0;
 }
 static void menu_action_submenu(menuFunc_t data)
 {
+	backMenu = currentMenu;
     currentMenu = data;
     encoderPosition = 0;
 }
@@ -815,7 +818,21 @@ void lcd_update()
     #ifdef LCD_HAS_SLOW_BUTTONS
     buttons |= lcd_implementation_read_slow_buttons(); // buttons which take too long to read in interrupt context
     #endif
-    
+
+    #if defined(LCD_I2C_VIKI)
+	// viki has up/down and back buttons
+	if(buttons & B_UP) {
+		encoderDiff += ENCODER_STEPS_PER_MENU_ITEM;
+	}else if(buttons & B_DW) {
+		encoderDiff -= ENCODER_STEPS_PER_MENU_ITEM;
+
+    }else if(buttons & B_LE) {
+		if(backMenu == NULL) menu_action_back(lcd_main_menu);
+		else menu_action_back(backMenu);
+	}
+		
+    #endif //VIKI
+
     #if (SDCARDDETECT > -1)
     if((IS_SD_INSERTED != lcd_oldcardstatus))
     {

@@ -692,8 +692,8 @@ static void lcd_implementation_update_indicators()
     uint8_t leds = 0;
 #ifdef SHOWIFHEATINGON
 	//indicate that hotend or bed is on, not if it is actually being heated
-	if (target_temperature[0] > 0) leds |= LED_A;
-	if (target_temperature_bed > 0) leds |= LED_B;
+	if (target_temperature_bed > 0) leds |= LED_A;
+	if (target_temperature[0] > 0) leds |= LED_B;
 	
 #else
 	if (isHeatingBed()) leds |= LED_A;
