@@ -59,16 +59,16 @@
 #define DELTA_SEGMENTS_PER_SECOND 200
 
 // Center-to-center distance of the holes in the diagonal push rods.
-#define DELTA_DIAGONAL_ROD 429.343  // mm
+#define DELTA_DIAGONAL_ROD 370 // mm
 
 // Horizontal offset from middle of printer to smooth rod center.
-#define DELTA_SMOOTH_ROD_OFFSET 202.1019 - 0.5 // mm
+#define DELTA_SMOOTH_ROD_OFFSET 267.5441147424726 // mm
 
 // Horizontal offset of the universal joints on the end effector.
-#define DELTA_EFFECTOR_OFFSET 0 // mm
+#define DELTA_EFFECTOR_OFFSET 45.85 // mm
 
 // Horizontal offset of the universal joints on the carriages.
-#define DELTA_CARRIAGE_OFFSET 0 // mm
+#define DELTA_CARRIAGE_OFFSET 23 // mm
 
 // Effective horizontal distance bridged by diagonal push rods.
 #define DELTA_RADIUS (DELTA_SMOOTH_ROD_OFFSET-DELTA_EFFECTOR_OFFSET-DELTA_CARRIAGE_OFFSET)
