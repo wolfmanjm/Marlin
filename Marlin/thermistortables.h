@@ -633,6 +633,42 @@ const short temptable_60[][2] PROGMEM = {
 };
 #endif
 
+#if (THERMISTORHEATER_0 == 71) || (THERMISTORHEATER_1 == 71) || (THERMISTORHEATER_2 == 71) || (THERMISTORBED == 71)
+// EPCOS 100K Thermistor (B57540G0104F000)
+// Thermistor lookup table for RepRap Temperature Sensor Boards (http://make.rrrf.org/ts)
+// Made with createTemperatureLookup.py (http://svn.reprap.org/trunk/reprap/firmware/Arduino/utilities/createTemperatureLookup.py)
+// ./createTemperatureLookup.py --r0=100000 --t0=25 --r1=0 --r2=4700 --beta=4066 --max-adc=1023
+// r0: 100000
+// t0: 25
+// r1: 0
+// r2: 4700
+// beta: 4066
+// max adc: 1023
+#define NUMTEMPS 20
+const short temptable_71[][2] PROGMEM = {
+	{1*OVERSAMPLENR, 841},
+	{54*OVERSAMPLENR, 255},
+	{107*OVERSAMPLENR, 209},
+	{160*OVERSAMPLENR, 184},
+	{213*OVERSAMPLENR, 166},
+	{266*OVERSAMPLENR, 153},
+	{319*OVERSAMPLENR, 142},
+	{372*OVERSAMPLENR, 132},
+	{425*OVERSAMPLENR, 124},
+	{478*OVERSAMPLENR, 116},
+	{531*OVERSAMPLENR, 108},
+	{584*OVERSAMPLENR, 101},
+	{637*OVERSAMPLENR, 93},
+	{690*OVERSAMPLENR, 86},
+	{743*OVERSAMPLENR, 78},
+	{796*OVERSAMPLENR, 70},
+	{849*OVERSAMPLENR, 61},
+	{902*OVERSAMPLENR, 50},
+	{955*OVERSAMPLENR, 34},
+	{1008*OVERSAMPLENR, 3}
+};
+#endif
+
 
 #define _TT_NAME(_N) temptable_ ## _N
 #define TT_NAME(_N) _TT_NAME(_N)
