@@ -203,6 +203,7 @@ else
 VPATH += $(HARDWARE_DIR)/libraries/LiquidCrystal
 VPATH += $(HARDWARE_DIR)/libraries/SPI
 endif
+
 ifeq ($(HARDWARE_VARIANT), arduino)
 HARDWARE_SUB_VARIANT ?= mega
 VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/variants/$(HARDWARE_SUB_VARIANT)
@@ -221,12 +222,19 @@ CXXSRC = WMath.cpp WString.cpp Print.cpp Marlin_main.cpp	\
 	watchdog.cpp
 CXXSRC += LiquidCrystal.cpp ultralcd.cpp SPI.cpp Servo.cpp Tone.cpp
 
+# add glcd library
+VPATH += /home/morris/work/sketchbook/libraries/U8glib
+VPATH += /home/morris/work/sketchbook/libraries/U8glib/utility
+CXXSRC += U8glib.cpp
+SRC += $(notdir $(wildcard /home/morris/work/sketchbook/libraries/U8glib/utility/*.c))
+
 #Check for Arduino 1.0.0 or higher and use the correct sourcefiles for that version
 ifeq ($(shell [ $(ARDUINO_VERSION) -ge 100 ] && echo true), true)
 CXXSRC += main.cpp
 else
 SRC += pins_arduino.c main.c
 endif
+
 
 FORMAT = ihex
 
