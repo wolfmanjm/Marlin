@@ -333,7 +333,8 @@ void setup_powerhold()
   #endif
   #if defined(PS_ON_PIN) && PS_ON_PIN > -1
     SET_OUTPUT(PS_ON_PIN);
-    WRITE(PS_ON_PIN, PS_ON_AWAKE);
+    //WRITE(PS_ON_PIN, PS_ON_AWAKE);
+    WRITE(PS_ON_PIN, PS_ON_ASLEEP); // start up off
   #endif
 }
 
@@ -1394,8 +1395,7 @@ void process_commands()
       }
       break;
     case 85: // M85
-      code_seen('S');
-      max_inactive_time = code_value() * 1000;
+      if(code_seen('S')) max_inactive_time = code_value() * 1000;
       break;
     case 92: // M92
       for(int8_t i=0; i < NUM_AXIS; i++)
