@@ -24,7 +24,7 @@
 #define SERIAL_PORT 0
 
 // This determines the communication speed of the printer
-#define BAUDRATE 115200
+#define BAUDRATE 250000
 
 // This enables the serial port associated to the Bluetooth interface
 //#define BTENABLED              // Enable BT interface on AT90USB devices
@@ -51,6 +51,7 @@
 // 65 = Azteeg X1
 // 66 = Melzi with ATmega1284 (MaKr3d version)
 // 67 = Azteeg X3
+// 68 = Azteeg X3 Pro
 // 7  = Ultimaker
 // 71 = Ultimaker (Older electronics. Pre 1.5.4. This is rare)
 // 77 = 3Drag Controller
@@ -100,9 +101,9 @@
 // Make delta curves from many straight lines (linear interpolation).
 // This is a trade-off between visible corners (not enough segments)
 // and processor overload (too many expensive sqrt calls).
-#define DELTA_SEGMENTS_PER_SECOND 200
+#define DELTA_SEGMENTS_PER_SECOND 100
 
-// NOTE NB all values for DELTA_* values MOUST be floating point, so always have a decimal point in them
+// NOTE NB all values for DELTA_* values MUST be floating point, so always have a decimal point in them
 
 // Center-to-center distance of the holes in the diagonal push rods.
 #define DELTA_DIAGONAL_ROD 370.0 // mm
@@ -118,18 +119,6 @@
 
 // Effective horizontal distance bridged by diagonal push rods.
 #define DELTA_RADIUS (DELTA_SMOOTH_ROD_OFFSET-DELTA_EFFECTOR_OFFSET-DELTA_CARRIAGE_OFFSET)
-
-#define DELTA_DIAGONAL_ROD_2 sq(DELTA_DIAGONAL_ROD)
-
-// Effective X/Y positions of the three vertical towers.
-#define SIN_60 0.8660254037844386
-#define COS_60 0.5
-#define DELTA_TOWER1_X -SIN_60*DELTA_RADIUS // front left tower
-#define DELTA_TOWER1_Y -COS_60*DELTA_RADIUS
-#define DELTA_TOWER2_X SIN_60*DELTA_RADIUS // front right tower
-#define DELTA_TOWER2_Y -COS_60*DELTA_RADIUS
-#define DELTA_TOWER3_X 0.0 // back middle tower
-#define DELTA_TOWER3_Y DELTA_RADIUS
 
 //===========================================================================
 //=============================Thermal Settings  ============================
