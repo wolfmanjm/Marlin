@@ -47,6 +47,7 @@
 #include "language.h"
 #include "pins_arduino.h"
 #include "math.h"
+#include "float.h"
 
 #ifdef BLINKM
 #include "BlinkM.h"
@@ -253,15 +254,15 @@ int EtoPPressure=0;
   // these are the default values, can be overriden with M665
   float delta_radius= DELTA_RADIUS;
   float delta_tower1_x= -SIN_60*delta_radius; // front left tower
-  float delta_tower1_y= -COS_60*delta_radius;	   
+  float delta_tower1_y= -COS_60*delta_radius;
   float delta_tower2_x=  SIN_60*delta_radius; // front right tower
-  float delta_tower2_y= -COS_60*delta_radius;	   
+  float delta_tower2_y= -COS_60*delta_radius;
   float delta_tower3_x= 0.0;                  // back middle tower
   float delta_tower3_y= delta_radius;
   float delta_diagonal_rod= DELTA_DIAGONAL_ROD;
   float delta_diagonal_rod_2= sq(delta_diagonal_rod);
   float delta_segments_per_second= DELTA_SEGMENTS_PER_SECOND;
-#endif					
+#endif
 
 //===========================================================================
 //=============================private variables=============================
@@ -1048,13 +1049,13 @@ static void homeaxis(int axis) {
 
     destination[axis] = 1.5 * max_length(axis) * axis_home_dir;
     feedrate = homing_feedrate[axis];
-    plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder);
+    plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder, fabs(destination[axis]));
     st_synchronize();
 
     current_position[axis] = 0;
     plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
     destination[axis] = -home_retract_mm(axis) * axis_home_dir;
-    plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder);
+    plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder, fabs(destination[axis]));
     st_synchronize();
 
     destination[axis] = 2*home_retract_mm(axis) * axis_home_dir;
@@ -1063,14 +1064,14 @@ static void homeaxis(int axis) {
 #else
     feedrate = homing_feedrate[axis]/2 ;
 #endif
-    plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder);
+    plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder, fabs(destination[axis]));
     st_synchronize();
 #ifdef DELTA
     // retrace by the amount specified in endstop_adj
     if (endstop_adj[axis] * axis_home_dir < 0) {
       plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
       destination[axis] = endstop_adj[axis];
-      plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder);
+      plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder, fabs(destination[axis]));
       st_synchronize();
     }
 #endif
@@ -1172,7 +1173,7 @@ void process_commands()
         destination[Z_AXIS]=current_position[Z_AXIS];
         current_position[Z_AXIS]+=retract_zlift;
         destination[E_AXIS]=current_position[E_AXIS];
-        current_position[E_AXIS]-=(retract_length+retract_recover_length)/volumetric_multiplier[active_extruder]; 
+        current_position[E_AXIS]-=(retract_length+retract_recover_length)/volumetric_multiplier[active_extruder];
         plan_set_e_position(current_position[E_AXIS]);
         float oldFeedrate = feedrate;
         feedrate=retract_recover_feedrate;
@@ -1214,7 +1215,7 @@ void process_commands()
           destination[Y_AXIS] = 3 * Z_MAX_LENGTH;
           destination[Z_AXIS] = 3 * Z_MAX_LENGTH;
           feedrate = 1.732 * homing_feedrate[X_AXIS];
-          plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder);
+          plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder, fabs(destination[Z_AXIS]));
           st_synchronize();
           endstops_hit_on_purpose();
 
@@ -2290,7 +2291,7 @@ void process_commands()
 		if(code_seen('S')) {
 			delta_segments_per_second= code_value();
 		}
-		
+
 		recalc_delta_settings(delta_radius, delta_diagonal_rod);
 		break;
     case 666: // M666 set delta endstop adjustemnt
@@ -3130,9 +3131,9 @@ void clamp_to_software_endstops(float target[3])
 void recalc_delta_settings(float radius, float diagonal_rod)
 {
 	 delta_tower1_x= -SIN_60*radius; // front left tower
-	 delta_tower1_y= -COS_60*radius;	   
+	 delta_tower1_y= -COS_60*radius;
 	 delta_tower2_x=  SIN_60*radius; // front right tower
-	 delta_tower2_y= -COS_60*radius;	   
+	 delta_tower2_y= -COS_60*radius;
 	 delta_tower3_x= 0.0;                  // back middle tower
 	 delta_tower3_y= radius;
 	 delta_diagonal_rod_2= sq(diagonal_rod);
@@ -3177,22 +3178,32 @@ void prepare_move()
   float cartesian_mm = sqrt(sq(difference[X_AXIS]) +
                             sq(difference[Y_AXIS]) +
                             sq(difference[Z_AXIS]));
-  if (cartesian_mm < 0.000001) { cartesian_mm = abs(difference[E_AXIS]); }
-  if (cartesian_mm < 0.000001) { return; }
-  float seconds = 6000 * cartesian_mm / feedrate / feedmultiply;
-  int steps = max(1, int(delta_segments_per_second * seconds));
-  // SERIAL_ECHOPGM("mm="); SERIAL_ECHO(cartesian_mm);
-  // SERIAL_ECHOPGM(" seconds="); SERIAL_ECHO(seconds);
-  // SERIAL_ECHOPGM(" steps="); SERIAL_ECHOLN(steps);
-  for (int s = 1; s <= steps; s++) {
-    float fraction = float(s) / float(steps);
-    for(int8_t i=0; i < NUM_AXIS; i++) {
-      destination[i] = current_position[i] + difference[i] * fraction;
-    }
+  if (cartesian_mm < FLT_EPSILON) { cartesian_mm = fabs(difference[E_AXIS]); }
+  if (cartesian_mm < FLT_EPSILON) { return; }
+  if(fabs(difference[Z_AXIS]) >= FLT_EPSILON && fabs(difference[X_AXIS]) < FLT_EPSILON && fabs(difference[Y_AXIS]) < FLT_EPSILON) {
+    // Z only moves do not require segmentation
     calculate_delta(destination);
     plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS],
                      destination[E_AXIS], feedrate*feedmultiply/60/100.0,
-                     active_extruder);
+                     active_extruder, cartesian_mm);
+  }else{
+    // need to segment
+    float seconds = 6000 * cartesian_mm / feedrate / feedmultiply;
+    int steps = max(1, int(delta_segments_per_second * seconds));
+    float cmps= cartesian_mm/steps; // amount moved in cartesian space per step
+    // SERIAL_ECHOPGM("mm="); SERIAL_ECHO(cartesian_mm);
+    // SERIAL_ECHOPGM(" seconds="); SERIAL_ECHO(seconds);
+    // SERIAL_ECHOPGM(" steps="); SERIAL_ECHOLN(steps);
+    for (int s = 1; s <= steps; s++) {
+      float fraction = float(s) / float(steps);
+      for(int8_t i=0; i < NUM_AXIS; i++) {
+        destination[i] = current_position[i] + difference[i] * fraction;
+      }
+      calculate_delta(destination);
+      plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS],
+                     destination[E_AXIS], feedrate*feedmultiply/60/100.0,
+                     active_extruder, cmps);
+    }
   }
 #else
 
