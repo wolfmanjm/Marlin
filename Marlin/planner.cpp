@@ -693,10 +693,14 @@ void plan_buffer_line(const float &x, const float &y, const float &z, const floa
   else
   {
     #ifndef DELTA
-      block->millimeters = sqrt(square(delta_mm[X_AXIS]) + square(delta_mm[Y_AXIS]) + square(delta_mm[Z_AXIS]));
+	  block->millimeters = sqrt(square(delta_mm[X_AXIS]) + square(delta_mm[Y_AXIS]) + square(delta_mm[Z_AXIS]));
     #else
-      // if we use the above calculation for a delta it will run at around half the requested speed so we use the previously calculated cartesian distance in mm
-      block->millimeters = cartesian_mm;
+	  if(cartesian_mm == 0.0) { // don't know what the cartesian distance is so use actuator
+		  block->millimeters = sqrt(square(delta_mm[X_AXIS]) + square(delta_mm[Y_AXIS]) + square(delta_mm[Z_AXIS]));
+	  }else{
+		  // if we use the above calculation for a delta it will run at around half the requested speed so we use the previously calculated cartesian distance in mm
+		  block->millimeters = cartesian_mm;
+	  }
     #endif
   }
   float inverse_millimeters = 1.0/block->millimeters;  // Inverse millimeters to remove multiple divides
