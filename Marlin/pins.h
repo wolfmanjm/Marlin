@@ -2559,6 +2559,16 @@
   #endif
 #endif
 
+#ifdef SWAP_ENDSTOP_PINS
+// Swap the min/max endstop pins
+#define X_MIN_PIN           2 // swapped
+#define X_MAX_PIN           3
+#define Y_MIN_PIN          15 // swapped
+#define Y_MAX_PIN          14
+#define Z_MIN_PIN          19 // swapped
+#define Z_MAX_PIN          18
+#endif
+
 #ifdef DISABLE_MAX_ENDSTOPS
 #define X_MAX_PIN          -1
 #define Y_MAX_PIN          -1
@@ -2577,12 +2587,3 @@
                         analogInputToDigitalPin(TEMP_0_PIN), analogInputToDigitalPin(TEMP_1_PIN), analogInputToDigitalPin(TEMP_2_PIN), analogInputToDigitalPin(TEMP_BED_PIN) }
 #endif
 
-#ifdef SWAP_ENDSTOP_PINS
-// Swap the min/max pins
-#define X_MIN_PIN           2 // swapped
-#define X_MAX_PIN           3
-#define Y_MIN_PIN          15 // swapped
-#define Y_MAX_PIN          14
-#define Z_MIN_PIN          19 // swapped
-#define Z_MAX_PIN          18
-#endif
